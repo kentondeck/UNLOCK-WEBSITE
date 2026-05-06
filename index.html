@@ -1,897 +1,921 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modern Structure — Building Company | Auckland &amp; Northland</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNLOCK — Breathe More. Be More.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<!-- Shopify Buy SDK -->
+<script src="https://sdks.shopifycdn.com/js-buy-sdk/v2/latest/index.umd.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: #0a0a0a; color: #fff; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: #ff3cac; border-radius: 2px; }
+  #root { min-height: 100vh; }
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 30s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            base:    '#0F0E0D',
-            surf1:   '#161513',
-            surf2:   '#1E1C1A',
-            border:  '#2A2724',
-            gold:    '#C9A770',
-            goldlt:  '#DEC090',
-            golddm:  '#8A7050',
-            cream:   '#F2EDE6',
-            muted:   '#9C9489',
-          },
-          fontFamily: {
-            display: ['"Space Grotesk"', 'sans-serif'],
-            sans:    ['Inter', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-anim-1 { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+  .hero-anim-2 { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.22s both; }
+  .hero-anim-3 { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
+  .hero-anim-4 { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
 
-  <style>
-    /* ── CSS Custom Properties ── */
-    :root {
-      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-standard: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(0); }
+  }
+  @keyframes slideOutRight {
+    from { transform: translateX(0); }
+    to   { transform: translateX(100%); }
+  }
+  @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-    /* ── Grain Texture ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.038;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 200px 200px;
-    }
-
-    /* ── Global focus ── */
-    :focus-visible {
-      outline: 2px solid #C9A770;
-      outline-offset: 3px;
-      border-radius: 2px;
-    }
-
-    /* ── Nav scroll state ── */
-    #site-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 50;
-      background-color: transparent;
-      transition:
-        background-color 0.4s var(--ease-standard),
-        box-shadow 0.4s var(--ease-standard);
-    }
-    #site-nav.scrolled {
-      background-color: #161513;
-      box-shadow:
-        0 4px 24px rgba(201, 167, 112, 0.06),
-        0 1px 0 rgba(42, 39, 36, 0.8);
-    }
-
-    /* ── Marquee ── */
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-    .marquee-track {
-      display: flex;
-      width: max-content;
-      animation: marquee 32s linear infinite;
-      will-change: transform;
-    }
-    .marquee-track:hover {
-      animation-play-state: paused;
-    }
-
-    /* ── Scroll Reveal ── */
-    [data-reveal] {
-      opacity: 0;
-      transform: translateY(28px);
-      transition:
-        opacity 0.75s var(--ease-out-expo),
-        transform 0.75s var(--ease-out-expo);
-    }
-    [data-reveal].revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── Portfolio Card Hover ── */
-    .portfolio-card .card-img {
-      transition: transform 0.65s var(--ease-out-expo);
-    }
-    .portfolio-card:hover .card-img {
-      transform: scale(1.05);
-    }
-    .portfolio-card .card-overlay {
-      opacity: 0;
-      transition: opacity 0.35s var(--ease-out-expo);
-    }
-    .portfolio-card:hover .card-overlay {
-      opacity: 1;
-    }
-
-    /* ── Layered Gold Shadows ── */
-    .shadow-gold {
-      box-shadow:
-        0 2px 8px rgba(201, 167, 112, 0.06),
-        0 8px 32px rgba(201, 167, 112, 0.05),
-        0 0 0 1px rgba(42, 39, 36, 0.9);
-    }
-    .shadow-gold-hover {
-      transition:
-        box-shadow 0.3s var(--ease-standard),
-        transform 0.25s var(--spring);
-    }
-    .shadow-gold-hover:hover {
-      box-shadow:
-        0 4px 16px rgba(201, 167, 112, 0.14),
-        0 16px 48px rgba(201, 167, 112, 0.10),
-        0 0 0 1px rgba(201, 167, 112, 0.18);
-      transform: translateY(-2px);
-    }
-
-    /* ── Button base ── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border-radius: 0;
-      cursor: pointer;
-      transition:
-        background-color 0.25s var(--ease-standard),
-        color 0.25s var(--ease-standard),
-        transform 0.2s var(--spring),
-        box-shadow 0.3s var(--ease-standard);
-    }
-    .btn:active { transform: scale(0.97); }
-
-    .btn-gold {
-      background-color: #C9A770;
-      color: #0F0E0D;
-      padding: 1rem 2rem;
-    }
-    .btn-gold:hover {
-      background-color: #DEC090;
-      box-shadow:
-        0 4px 20px rgba(201, 167, 112, 0.25),
-        0 8px 40px rgba(201, 167, 112, 0.15);
-    }
-
-    .btn-outline {
-      background-color: transparent;
-      color: #C9A770;
-      border: 1px solid #C9A770;
-      padding: 0.625rem 1.5rem;
-    }
-    .btn-outline:hover {
-      background-color: #C9A770;
-      color: #0F0E0D;
-    }
-
-    /* ── Service card group hover ── */
-    .service-card {
-      transition: background-color 0.3s var(--ease-standard);
-    }
-    .service-card:hover {
-      background-color: #1E1C1A;
-    }
-    .service-card:hover .service-name {
-      color: #C9A770;
-    }
-    .service-name {
-      transition: color 0.25s var(--ease-standard);
-    }
-
-    /* ── Reduce motion ── */
-    @media (prefers-reduced-motion: reduce) {
-      .marquee-track { animation: none; }
-      [data-reveal] {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-      * { transition-duration: 0.01ms !important; }
-    }
-
-    /* ── Mobile menu transition ── */
-    #mobile-menu {
-      transition: opacity 0.25s var(--ease-standard), transform 0.25s var(--ease-standard);
-    }
-    #mobile-menu.hidden {
-      display: none;
-    }
-
-    /* ── Input styles ── */
-    .form-input {
-      width: 100%;
-      background-color: #1E1C1A;
-      border: 1px solid #2A2724;
-      color: #F2EDE6;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9375rem;
-      padding: 0.875rem 1rem;
-      outline: none;
-      transition: border-color 0.2s var(--ease-standard);
-    }
-    .form-input::placeholder { color: rgba(156, 148, 137, 0.5); }
-    .form-input:focus { border-color: #C9A770; }
-
-    /* ── Radial glow helper ── */
-    .glow-gold {
-      background: radial-gradient(ellipse at center, rgba(201, 167, 112, 0.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
-  </style>
+  /* grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+</style>
 </head>
-
-<body class="bg-base text-cream font-sans antialiased">
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- NAV                                      -->
-  <!-- ════════════════════════════════════════ -->
-  <nav id="site-nav" aria-label="Main navigation">
-    <div class="mx-auto max-w-7xl px-6 md:px-12 lg:px-20 h-20 flex items-center justify-between">
-
-      <!-- Logo -->
-      <a href="#" class="flex items-center flex-shrink-0">
-        <img src="brand_assets/T - Shirt Logos-01.png" alt="Modern Structure Building Company" class="h-14 w-auto" />
-      </a>
-
-      <!-- Desktop links -->
-      <div class="hidden md:flex items-center gap-14">
-        <a href="#" class="text-cream/75 hover:text-gold transition-colors duration-300 font-sans font-medium text-sm tracking-wide">Home</a>
-        <a href="#portfolio" class="text-cream/75 hover:text-gold transition-colors duration-300 font-sans font-medium text-sm tracking-wide">Our Work</a>
-        <a href="#services" class="text-cream/75 hover:text-gold transition-colors duration-300 font-sans font-medium text-sm tracking-wide">Services</a>
-        <a href="#contact" class="text-cream/75 hover:text-gold transition-colors duration-300 font-sans font-medium text-sm tracking-wide">Contact</a>
-      </div>
-
-      <!-- Desktop CTA + Mobile Hamburger -->
-      <div class="flex items-center gap-6">
-        <a href="#contact" class="btn btn-outline hidden md:inline-flex text-sm">Contact Us</a>
-        <button
-          id="menu-btn"
-          class="md:hidden flex flex-col gap-[5px] p-2"
-          aria-label="Open menu"
-          aria-expanded="false"
-          aria-controls="mobile-menu"
-        >
-          <span class="block w-6 h-px bg-cream/80"></span>
-          <span class="block w-6 h-px bg-cream/80"></span>
-          <span class="block w-4 h-px bg-cream/80"></span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden absolute left-0 right-0 top-20 bg-surf1 border-b border-border flex-col py-8 px-6 gap-6" role="menu">
-      <a href="#" class="text-cream/80 hover:text-gold font-sans font-medium text-base" role="menuitem">Home</a>
-      <a href="#portfolio" class="text-cream/80 hover:text-gold font-sans font-medium text-base" role="menuitem">Our Work</a>
-      <a href="#services" class="text-cream/80 hover:text-gold font-sans font-medium text-base" role="menuitem">Services</a>
-      <a href="#contact" class="text-cream/80 hover:text-gold font-sans font-medium text-base" role="menuitem">Contact</a>
-      <a href="#contact" class="btn btn-gold text-sm mt-2 self-start">Get in Touch</a>
-    </div>
-  </nav>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- HERO                                     -->
-  <!-- ════════════════════════════════════════ -->
-  <section class="relative min-h-screen flex items-end pb-24 md:pb-36 overflow-hidden">
-    <!-- Background image -->
-    <div class="absolute inset-0 z-0">
-      <img
-        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&h=1080&fit=crop&q=85"
-        alt=""
-        class="w-full h-full object-cover"
-      />
-    </div>
-
-    <!-- Gradient overlay -->
-    <div class="absolute inset-0 z-10 bg-gradient-to-t from-base via-base/75 to-base/20"></div>
-    <!-- Top vignette so nav logo is always readable -->
-    <div class="absolute inset-x-0 top-0 h-40 z-10 bg-gradient-to-b from-base/60 to-transparent"></div>
-
-    <!-- Radial gold glow -->
-    <div class="absolute z-10 bottom-0 left-1/4 w-[700px] h-[500px] glow-gold blur-3xl"></div>
-
-    <!-- Content -->
-    <div class="relative z-20 mx-auto max-w-7xl px-6 md:px-12 lg:px-20 w-full" data-reveal>
-      <p class="text-gold font-sans font-medium text-sm tracking-[0.2em] uppercase mb-6">
-        New Zealand's Premier Residential Builders
-      </p>
-      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cream leading-[1.08] tracking-[-0.03em] font-bold mb-8 max-w-4xl">
-        Looking for a trusted building company to bring your vision to life?
-      </h1>
-      <p class="font-sans text-muted text-lg leading-relaxed mb-12 max-w-lg">
-        Serving Auckland &amp; Northland — residential renovations and new builds crafted with precision and care.
-      </p>
-      <div class="flex flex-wrap gap-4 items-center">
-        <a href="#contact" class="btn btn-gold text-sm px-10 py-5">Contact Us</a>
-        <a href="#portfolio" class="font-sans text-cream/55 hover:text-gold text-sm tracking-wide transition-colors duration-300 underline underline-offset-4">
-          View Our Work ↓
-        </a>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- MARQUEE                                  -->
-  <!-- ════════════════════════════════════════ -->
-  <section class="bg-surf1 border-y border-border py-5 overflow-hidden relative z-10" aria-hidden="true">
-    <div class="marquee-track">
-      <!-- First copy -->
-      <span class="flex items-center whitespace-nowrap font-sans text-cream/45 text-sm px-6">
-        Industry Expertise <span class="text-gold mx-6 text-lg">·</span>
-        Expert Project Management <span class="text-gold mx-6 text-lg">·</span>
-        Outstanding Service <span class="text-gold mx-6 text-lg">·</span>
-        Building Renovations <span class="text-gold mx-6 text-lg">·</span>
-        New Build Design <span class="text-gold mx-6 text-lg">·</span>
-        Auckland &amp; Northland <span class="text-gold mx-6 text-lg">·</span>
-        Trusted &amp; Experienced <span class="text-gold mx-6 text-lg">·</span>
-      </span>
-      <!-- Duplicate for seamless loop -->
-      <span class="flex items-center whitespace-nowrap font-sans text-cream/45 text-sm px-6">
-        Industry Expertise <span class="text-gold mx-6 text-lg">·</span>
-        Expert Project Management <span class="text-gold mx-6 text-lg">·</span>
-        Outstanding Service <span class="text-gold mx-6 text-lg">·</span>
-        Building Renovations <span class="text-gold mx-6 text-lg">·</span>
-        New Build Design <span class="text-gold mx-6 text-lg">·</span>
-        Auckland &amp; Northland <span class="text-gold mx-6 text-lg">·</span>
-        Trusted &amp; Experienced <span class="text-gold mx-6 text-lg">·</span>
-      </span>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- PORTFOLIO                                -->
-  <!-- ════════════════════════════════════════ -->
-  <section id="portfolio" class="bg-base py-24 md:py-32 relative z-10">
-    <div class="mx-auto max-w-7xl px-6 md:px-12 lg:px-20">
-
-      <!-- Header -->
-      <div class="mb-16 max-w-xl" data-reveal>
-        <p class="text-gold font-sans font-medium text-sm tracking-[0.2em] uppercase mb-4">Portfolio</p>
-        <h2 class="font-display text-4xl md:text-5xl text-cream leading-tight tracking-[-0.02em] font-bold">
-          Our Latest Work in<br/><span class="text-gold">Quality Craftsmanship</span>
-        </h2>
-      </div>
-
-      <!-- Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- Card 1 -->
-        <div class="portfolio-card overflow-hidden shadow-gold" data-reveal style="transition-delay: 0.05s">
-          <div class="relative aspect-[4/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop&q=80" alt="St Heliers Bay Renovation" class="card-img w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gold/8 mix-blend-multiply"></div>
-            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-base/85 via-base/30 to-transparent flex items-end p-5">
-              <span class="font-display text-cream text-lg">View Project →</span>
-            </div>
-          </div>
-          <div class="bg-surf1 p-5 border-t border-border">
-            <h3 class="font-display text-xl font-semibold text-cream">St Heliers Bay Renovation</h3>
-            <p class="font-sans text-sm text-muted mt-1">Auckland</p>
-          </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="portfolio-card overflow-hidden shadow-gold" data-reveal style="transition-delay: 0.1s">
-          <div class="relative aspect-[4/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&h=600&fit=crop&q=80" alt="Dream Outdoor Space, Maraetai" class="card-img w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gold/8 mix-blend-multiply"></div>
-            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-base/85 via-base/30 to-transparent flex items-end p-5">
-              <span class="font-display text-cream text-lg">View Project →</span>
-            </div>
-          </div>
-          <div class="bg-surf1 p-5 border-t border-border">
-            <h3 class="font-display text-xl font-semibold text-cream">Dream Outdoor Space Renovation</h3>
-            <p class="font-sans text-sm text-muted mt-1">Maraetai</p>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="portfolio-card overflow-hidden shadow-gold" data-reveal style="transition-delay: 0.15s">
-          <div class="relative aspect-[4/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=800&h=600&fit=crop&q=80" alt="Ellerslie Expansion" class="card-img w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gold/8 mix-blend-multiply"></div>
-            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-base/85 via-base/30 to-transparent flex items-end p-5">
-              <span class="font-display text-cream text-lg">View Project →</span>
-            </div>
-          </div>
-          <div class="bg-surf1 p-5 border-t border-border">
-            <h3 class="font-display text-xl font-semibold text-cream">Ellerslie Expansion</h3>
-            <p class="font-sans text-sm text-muted mt-1">Auckland — Two-bedroom unit with deck &amp; pergola</p>
-          </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="portfolio-card overflow-hidden shadow-gold" data-reveal style="transition-delay: 0.2s">
-          <div class="relative aspect-[4/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop&q=80" alt="Dream Kitchen Renovation, Ellerslie" class="card-img w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gold/8 mix-blend-multiply"></div>
-            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-base/85 via-base/30 to-transparent flex items-end p-5">
-              <span class="font-display text-cream text-lg">View Project →</span>
-            </div>
-          </div>
-          <div class="bg-surf1 p-5 border-t border-border">
-            <h3 class="font-display text-xl font-semibold text-cream">Dream Kitchen Renovation</h3>
-            <p class="font-sans text-sm text-muted mt-1">Ellerslie — Skylight installation</p>
-          </div>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="portfolio-card overflow-hidden shadow-gold" data-reveal style="transition-delay: 0.25s">
-          <div class="relative aspect-[4/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop&q=80" alt="Northland Deck Renovation" class="card-img w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gold/8 mix-blend-multiply"></div>
-            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-base/85 via-base/30 to-transparent flex items-end p-5">
-              <span class="font-display text-cream text-lg">View Project →</span>
-            </div>
-          </div>
-          <div class="bg-surf1 p-5 border-t border-border">
-            <h3 class="font-display text-xl font-semibold text-cream">Northland Deck Renovation</h3>
-            <p class="font-sans text-sm text-muted mt-1">Northland — Scenic views</p>
-          </div>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="portfolio-card overflow-hidden shadow-gold" data-reveal style="transition-delay: 0.3s">
-          <div class="relative aspect-[4/3] overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop&q=80" alt="Auckland Bathroom Renovation" class="card-img w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gold/8 mix-blend-multiply"></div>
-            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-base/85 via-base/30 to-transparent flex items-end p-5">
-              <span class="font-display text-cream text-lg">View Project →</span>
-            </div>
-          </div>
-          <div class="bg-surf1 p-5 border-t border-border">
-            <h3 class="font-display text-xl font-semibold text-cream">Auckland Bathroom Renovation</h3>
-            <p class="font-sans text-sm text-muted mt-1">Auckland</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- SERVICES                                 -->
-  <!-- ════════════════════════════════════════ -->
-  <section id="services" class="bg-surf1 border-y border-border py-24 md:py-32 relative z-10">
-    <div class="mx-auto max-w-7xl px-6 md:px-12 lg:px-20">
-
-      <!-- Header -->
-      <div class="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-8" data-reveal>
-        <div>
-          <p class="text-gold font-sans font-medium text-sm tracking-[0.2em] uppercase mb-4">What We Do</p>
-          <h2 class="font-display text-4xl md:text-5xl text-cream leading-tight tracking-[-0.02em] font-bold">
-            Built to Last.<br/><span class="text-gold">Designed to Impress.</span>
-          </h2>
-        </div>
-        <p class="font-sans text-muted leading-relaxed max-w-sm md:text-right">
-          From full renovations to bespoke new builds across Auckland &amp; Northland. Every project delivered with precision.
-        </p>
-      </div>
-
-      <!-- Services grid — border-collapse technique (no empty cell bleed) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border-l border-t border-border" data-reveal style="transition-delay: 0.1s">
-
-        <!-- Service 1 -->
-        <div class="service-card bg-surf1 p-8 flex flex-col gap-4 border-r border-b border-border">
-          <div class="w-10 h-10 border border-golddm flex items-center justify-center text-gold flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M2 10L10 3L18 10V18H13V13H7V18H2V10Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="service-name font-display text-xl font-semibold text-cream mb-2">Building Renovations</h3>
-            <p class="font-sans text-sm text-muted leading-relaxed">Full-scope residential renovations from concept to completion.</p>
-          </div>
-        </div>
-
-        <!-- Service 2 -->
-        <div class="service-card bg-surf1 p-8 flex flex-col gap-4 border-r border-b border-border">
-          <div class="w-10 h-10 border border-golddm flex items-center justify-center text-gold flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.25"/>
-              <rect x="11" y="2" width="7" height="7" stroke="currentColor" stroke-width="1.25"/>
-              <rect x="2" y="11" width="7" height="7" stroke="currentColor" stroke-width="1.25"/>
-              <rect x="11" y="11" width="7" height="7" stroke="currentColor" stroke-width="1.25"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="service-name font-display text-xl font-semibold text-cream mb-2">New Build Planning &amp; Design</h3>
-            <p class="font-sans text-sm text-muted leading-relaxed">Architect-coordinated new builds tailored to your brief.</p>
-          </div>
-        </div>
-
-        <!-- Service 3 -->
-        <div class="service-card bg-surf1 p-8 flex flex-col gap-4 border-r border-b border-border">
-          <div class="w-10 h-10 border border-golddm flex items-center justify-center text-gold flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="10" cy="8" r="3" stroke="currentColor" stroke-width="1.25"/>
-              <path d="M4 18C4 14.686 6.686 12 10 12C13.314 12 16 14.686 16 18" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-              <path d="M2 6C3.5 3 6 2 10 2" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="service-name font-display text-xl font-semibold text-cream mb-2">Outdoor Space Renovations</h3>
-            <p class="font-sans text-sm text-muted leading-relaxed">Patios, entertaining areas, and landscape integration.</p>
-          </div>
-        </div>
-
-        <!-- Service 4 -->
-        <div class="service-card bg-surf1 p-8 flex flex-col gap-4 border-r border-b border-border">
-          <div class="w-10 h-10 border border-golddm flex items-center justify-center text-gold flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M3 14C3 11.8 4.8 10 7 10H13C15.2 10 17 11.8 17 14V16H3V14Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
-              <path d="M3 16H17" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-              <circle cx="6" cy="7" r="2" stroke="currentColor" stroke-width="1.25"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="service-name font-display text-xl font-semibold text-cream mb-2">Bathroom Renovations</h3>
-            <p class="font-sans text-sm text-muted leading-relaxed">Precision tiling, bespoke joinery, and premium fixtures.</p>
-          </div>
-        </div>
-
-        <!-- Service 5 -->
-        <div class="service-card bg-surf1 p-8 flex flex-col gap-4 border-r border-b border-border">
-          <div class="w-10 h-10 border border-golddm flex items-center justify-center text-gold flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="2" y="6" width="16" height="10" rx="1" stroke="currentColor" stroke-width="1.25"/>
-              <path d="M5 6V4H15V6" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M8 11H12" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="service-name font-display text-xl font-semibold text-cream mb-2">Kitchen Renovations</h3>
-            <p class="font-sans text-sm text-muted leading-relaxed">Custom cabinetry and considered spatial planning.</p>
-          </div>
-        </div>
-
-        <!-- Service 6 -->
-        <div class="service-card bg-surf1 p-8 flex flex-col gap-4 border-r border-b border-border">
-          <div class="w-10 h-10 border border-golddm flex items-center justify-center text-gold flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M2 8H18M2 8V16H18V8M2 8L10 3L18 8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6 8V16M10 8V16M14 8V16" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 2"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="service-name font-display text-xl font-semibold text-cream mb-2">Deck Renovations</h3>
-            <p class="font-sans text-sm text-muted leading-relaxed">Hardwood and composite decking built for NZ conditions.</p>
-          </div>
-        </div>
-
-        <!-- Service 7 -->
-        <div class="service-card bg-surf1 p-8 flex flex-col gap-4 border-r border-b border-border">
-          <div class="w-10 h-10 border border-golddm flex items-center justify-center text-gold flex-shrink-0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M10 2L17 7V18H3V7L10 2Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
-              <rect x="7" y="12" width="6" height="6" stroke="currentColor" stroke-width="1.25"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="service-name font-display text-xl font-semibold text-cream mb-2">Custom Residential Construction</h3>
-            <p class="font-sans text-sm text-muted leading-relaxed">Turnkey builds for discerning homeowners.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- CTA                                      -->
-  <!-- ════════════════════════════════════════ -->
-  <section class="bg-base py-28 md:py-40 relative overflow-hidden z-10">
-    <!-- Radial glow -->
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div class="w-[700px] h-[500px] glow-gold blur-3xl"></div>
-    </div>
-
-    <div class="relative z-10 mx-auto max-w-2xl px-6 text-center" data-reveal>
-      <p class="text-gold font-sans font-medium text-sm tracking-[0.2em] uppercase mb-6">Start Your Project</p>
-      <h2 class="font-display text-5xl md:text-6xl text-cream leading-tight tracking-[-0.03em] font-bold mb-6">
-        Let's Work Together
-      </h2>
-      <p class="font-sans text-muted text-lg leading-relaxed mb-12 max-w-lg mx-auto">
-        Whether you're planning a renovation or starting from the ground up, we'd love to hear about your vision.
-      </p>
-      <a href="#contact" class="btn btn-gold text-sm px-12 py-5">Get in Touch →</a>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- CONTACT                                  -->
-  <!-- ════════════════════════════════════════ -->
-  <section id="contact" class="bg-surf1 border-t border-border py-24 md:py-32 relative z-10">
-    <div class="mx-auto max-w-7xl px-6 md:px-12 lg:px-20">
-
-      <!-- Header -->
-      <div class="mb-16" data-reveal>
-        <p class="text-gold font-sans font-medium text-sm tracking-[0.2em] uppercase mb-4">Contact</p>
-        <h2 class="font-display text-4xl md:text-5xl text-cream leading-tight tracking-[-0.02em] font-bold">Get in Touch</h2>
-      </div>
-
-      <!-- Two columns -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-
-        <!-- Left: Info -->
-        <div class="flex flex-col gap-10" data-reveal>
-          <p class="font-sans text-muted leading-relaxed max-w-sm">
-            We work across the Upper North Island. Reach out — we respond within one business day and would love to discuss your project.
-          </p>
-
-          <div class="flex flex-col gap-6">
-
-            <!-- Person -->
-            <div class="flex items-start gap-4">
-              <div class="w-5 h-5 text-gold flex-shrink-0 mt-0.5">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.25"/>
-                  <path d="M3 18C3 14.134 6.134 11 10 11C13.866 11 17 14.134 17 18" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <p class="font-sans text-xs text-muted uppercase tracking-widest mb-1">Contact</p>
-                <p class="font-sans text-cream">Tom</p>
-              </div>
-            </div>
-
-            <!-- Phone -->
-            <div class="flex items-start gap-4">
-              <div class="w-5 h-5 text-gold flex-shrink-0 mt-0.5">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M4 4C4 3.448 4.448 3 5 3H7.5L9 7L7.5 8.5C8.5 10.5 9.5 11.5 11.5 12.5L13 11L17 12.5V15C17 15.552 16.552 16 16 16C9.373 16 4 10.627 4 4Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div>
-                <p class="font-sans text-xs text-muted uppercase tracking-widest mb-1">Phone</p>
-                <a href="tel:021028506012" class="font-sans text-cream hover:text-gold transition-colors duration-300">021 028 50612</a>
-              </div>
-            </div>
-
-            <!-- Email -->
-            <div class="flex items-start gap-4">
-              <div class="w-5 h-5 text-gold flex-shrink-0 mt-0.5">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <rect x="2" y="4" width="16" height="12" rx="1" stroke="currentColor" stroke-width="1.25"/>
-                  <path d="M2 7L10 12L18 7" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <p class="font-sans text-xs text-muted uppercase tracking-widest mb-1">Email</p>
-                <a href="mailto:modernstructurebc@gmail.com" class="font-sans text-cream hover:text-gold transition-colors duration-300 break-all">modernstructurebc@gmail.com</a>
-              </div>
-            </div>
-
-            <!-- Instagram -->
-            <div class="flex items-start gap-4">
-              <div class="w-5 h-5 text-gold flex-shrink-0 mt-0.5">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <rect x="2" y="2" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.25"/>
-                  <circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.25"/>
-                  <circle cx="14.5" cy="5.5" r="0.75" fill="currentColor"/>
-                </svg>
-              </div>
-              <div>
-                <p class="font-sans text-xs text-muted uppercase tracking-widest mb-1">Instagram</p>
-                <a href="https://instagram.com/modernstructurebc" target="_blank" rel="noopener noreferrer" class="font-sans text-cream hover:text-gold transition-colors duration-300">@modernstructurebc</a>
-              </div>
-            </div>
-
-            <!-- Region -->
-            <div class="flex items-start gap-4">
-              <div class="w-5 h-5 text-gold flex-shrink-0 mt-0.5">
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M10 2C7.239 2 5 4.239 5 7C5 11 10 18 10 18C10 18 15 11 15 7C15 4.239 12.761 2 10 2Z" stroke="currentColor" stroke-width="1.25"/>
-                  <circle cx="10" cy="7" r="1.5" stroke="currentColor" stroke-width="1.25"/>
-                </svg>
-              </div>
-              <div>
-                <p class="font-sans text-xs text-muted uppercase tracking-widest mb-1">Service Area</p>
-                <p class="font-sans text-cream">Auckland &amp; Northland, New Zealand</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Right: Form -->
-        <div data-reveal style="transition-delay: 0.1s">
-          <form id="contact-form" class="flex flex-col gap-5" novalidate>
-
-            <div>
-              <label for="name" class="block font-sans text-xs text-cream/60 uppercase tracking-widest mb-2">Name</label>
-              <input type="text" id="name" name="name" class="form-input" placeholder="Your name" required />
-            </div>
-
-            <div>
-              <label for="email" class="block font-sans text-xs text-cream/60 uppercase tracking-widest mb-2">Email</label>
-              <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required />
-            </div>
-
-            <div>
-              <label for="subject" class="block font-sans text-xs text-cream/60 uppercase tracking-widest mb-2">Subject</label>
-              <input type="text" id="subject" name="subject" class="form-input" placeholder="Project enquiry" />
-            </div>
-
-            <div>
-              <label for="message" class="block font-sans text-xs text-cream/60 uppercase tracking-widest mb-2">Message</label>
-              <textarea id="message" name="message" rows="5" class="form-input resize-none" placeholder="Tell us about your project…" required></textarea>
-            </div>
-
-            <button type="submit" id="submit-btn" class="btn btn-gold w-full text-sm py-5 mt-2">
-              Send Message
-            </button>
-
-          </form>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- FOOTER                                   -->
-  <!-- ════════════════════════════════════════ -->
-  <footer class="bg-base border-t border-border py-12 relative z-10">
-    <div class="mx-auto max-w-7xl px-6 md:px-12 lg:px-20">
-
-      <!-- Top row -->
-      <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
-        <a href="#" class="flex-shrink-0">
-          <img src="brand_assets/T - Shirt Logos-01.png" alt="Modern Structure Building Company" class="h-10 w-auto opacity-70" />
-        </a>
-        <nav class="flex flex-wrap justify-center gap-8" aria-label="Footer navigation">
-          <a href="#" class="font-sans text-sm text-muted hover:text-cream transition-colors duration-300">Home</a>
-          <a href="#portfolio" class="font-sans text-sm text-muted hover:text-cream transition-colors duration-300">Our Work</a>
-          <a href="#services" class="font-sans text-sm text-muted hover:text-cream transition-colors duration-300">Services</a>
-          <a href="#contact" class="font-sans text-sm text-muted hover:text-cream transition-colors duration-300">Contact</a>
-        </nav>
-      </div>
-
-      <!-- Divider -->
-      <div class="border-t border-border my-8"></div>
-
-      <!-- Bottom row -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm font-sans text-muted">
-        <p>© 2025 Modern Structure Building Company. All rights reserved.</p>
-        <p>Serving Auckland &amp; Northland, New Zealand</p>
-      </div>
-
-    </div>
-  </footer>
-
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- WHATSAPP BUTTON                          -->
-  <!-- ════════════════════════════════════════ -->
-  <style>
-    .wa-btn {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 999;
-      width: 60px;
-      height: 60px;
-      background-color: #25D366;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 2px 8px rgba(0,0,0,0.3);
-      transition: transform 0.2s var(--spring), box-shadow 0.2s var(--ease-standard);
-    }
-    .wa-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 28px rgba(37, 211, 102, 0.55), 0 2px 8px rgba(0,0,0,0.3);
-    }
-    .wa-btn:active { transform: scale(0.95); }
-    @keyframes wa-pulse {
-      0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 2px 8px rgba(0,0,0,0.3), 0 0 0 0 rgba(37, 211, 102, 0.4); }
-      50% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4), 0 2px 8px rgba(0,0,0,0.3), 0 0 0 10px rgba(37, 211, 102, 0); }
-    }
-    .wa-btn { animation: wa-pulse 2.5s ease-in-out infinite; }
-    .wa-btn:hover { animation: none; }
-  </style>
-
-  <a
-    href="https://wa.me/642102850612?text=Hi%20Tom%2C%20I%27m%20interested%20in%20a%20building%20project."
-    target="_blank"
-    rel="noopener noreferrer"
-    class="wa-btn"
-    aria-label="Chat with us on WhatsApp"
-  >
-    <svg width="30" height="30" viewBox="0 0 30 30" fill="white" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M15 2C7.82 2 2 7.82 2 15c0 2.28.61 4.42 1.67 6.27L2 28l6.93-1.64A13 13 0 0 0 15 28c7.18 0 13-5.82 13-13S22.18 2 15 2Zm6.43 17.75c-.27.76-1.57 1.46-2.16 1.54-.55.08-1.24.11-2-.13-.46-.14-1.05-.34-1.8-.66-3.17-1.37-5.24-4.56-5.4-4.77-.16-.21-1.3-1.73-1.3-3.3 0-1.57.82-2.34 1.11-2.66.27-.3.6-.38.8-.38l.57.01c.18 0 .43-.07.67.51.27.62.9 2.19.98 2.35.08.16.13.34.03.55-.1.21-.16.34-.3.52-.16.18-.33.4-.47.54-.16.16-.32.33-.14.65.18.32.82 1.35 1.75 2.19 1.2 1.07 2.22 1.4 2.53 1.56.32.16.5.13.69-.08.19-.21.8-.94 1.01-1.26.21-.32.42-.27.7-.16.29.11 1.84.87 2.16 1.03.32.16.53.24.61.37.08.14.08.79-.19 1.55Z"/>
-    </svg>
-  </a>
-
-  <!-- ════════════════════════════════════════ -->
-  <!-- JAVASCRIPT                               -->
-  <!-- ════════════════════════════════════════ -->
-  <script>
-    // 1. Nav scroll listener
-    const nav = document.getElementById('site-nav');
-    const onScroll = () => {
-      nav.classList.toggle('scrolled', window.scrollY > 56);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // 2. Mobile menu toggle
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuBtn.addEventListener('click', () => {
-      const isHidden = mobileMenu.classList.toggle('hidden');
-      menuBtn.setAttribute('aria-expanded', String(!isHidden));
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ─── SHOPIFY CONFIG ───────────────────────────────────────────────────────────
+// Step 1: Replace domain with your .myshopify.com URL
+// Step 2: In Shopify Admin → Settings → Apps and sales channels → Develop apps
+//         Create an app, enable Storefront API, copy the access token
+// Step 3: For each product, go to the product page in Admin. The numeric ID is
+//         in the URL. Encode it: btoa('gid://shopify/ProductVariant/YOUR_ID')
+const SHOPIFY_CONFIG = {
+  domain:                'YOUR-STORE.myshopify.com',
+  storefrontAccessToken: 'YOUR_STOREFRONT_ACCESS_TOKEN',
+  variantIds: {
+    SPORT: 'YOUR_SPORT_VARIANT_ID_BASE64',
+    SLEEP: 'YOUR_SLEEP_VARIANT_ID_BASE64',
+    MAX:   'YOUR_MAX_VARIANT_ID_BASE64',
+  },
+};
+
+const IS_CONFIGURED = !SHOPIFY_CONFIG.domain.includes('YOUR-STORE');
+
+const C = {
+  black:  '#0a0a0a',
+  pink:   '#ff3cac',
+  yellow: '#e8ff00',
+  white:  '#ffffff',
+  s1:     '#111111',
+  s2:     '#1a1a1a',
+  s3:     '#252525',
+  text2:  '#888888',
+  border: 'rgba(255,255,255,0.08)',
+};
+
+// ─── CART HOOK ────────────────────────────────────────────────────────────────
+function useCart() {
+  const [client, setClient]     = useState(null);
+  const [checkout, setCheckout] = useState(null);
+  const [demoCart, setDemoCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [loading, setLoading]   = useState(false);
+
+  useEffect(() => {
+    if (!IS_CONFIGURED || !window.ShopifyBuy) return;
+    const c = ShopifyBuy.buildClient({
+      domain: SHOPIFY_CONFIG.domain,
+      storefrontAccessToken: SHOPIFY_CONFIG.storefrontAccessToken,
     });
-
-    // Close mobile menu when a link is clicked
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        menuBtn.setAttribute('aria-expanded', 'false');
+    setClient(c);
+    const storedId = localStorage.getItem('unlock_checkout_id');
+    const init = storedId
+      ? c.checkout.fetch(storedId).then(co => (co && !co.completedAt) ? co : c.checkout.create())
+      : c.checkout.create();
+    init.then(co => {
+      localStorage.setItem('unlock_checkout_id', co.id);
+      setCheckout(co);
+    }).catch(() => {
+      c.checkout.create().then(co => {
+        localStorage.setItem('unlock_checkout_id', co.id);
+        setCheckout(co);
       });
     });
+  }, []);
 
-    // 3. Scroll reveal via IntersectionObserver
-    const revealEls = document.querySelectorAll('[data-reveal]');
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      revealEls.forEach(el => io.observe(el));
+  const addToCart = useCallback(async (sku) => {
+    if (IS_CONFIGURED && client && checkout) {
+      setLoading(true);
+      try {
+        const updated = await client.checkout.addLineItems(checkout.id, [
+          { variantId: SHOPIFY_CONFIG.variantIds[sku], quantity: 1 },
+        ]);
+        setCheckout(updated);
+      } finally {
+        setLoading(false);
+      }
     } else {
-      // Fallback for older browsers
-      revealEls.forEach(el => el.classList.add('revealed'));
+      const prices = { SPORT: 14.99, SLEEP: 12.99, MAX: 16.99 };
+      const names  = { SPORT: 'UNLOCK Sport', SLEEP: 'UNLOCK Sleep', MAX: 'UNLOCK Max' };
+      setDemoCart(prev => {
+        const ex = prev.find(i => i.sku === sku);
+        if (ex) return prev.map(i => i.sku === sku ? { ...i, qty: i.qty + 1 } : i);
+        return [...prev, { id: sku + Date.now(), sku, name: names[sku], qty: 1, price: prices[sku] }];
+      });
     }
-    // Fallback: reveal everything after 1.2s (catches missed intersections & enables full-page screenshots)
-    setTimeout(() => {
-      revealEls.forEach(el => el.classList.add('revealed'));
-    }, 1200);
+    setCartOpen(true);
+  }, [client, checkout]);
 
-    // 4. Contact form submit handler
-    const form = document.getElementById('contact-form');
-    const submitBtn = document.getElementById('submit-btn');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      submitBtn.textContent = "Sent — We'll be in touch";
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.65';
-      submitBtn.style.cursor = 'not-allowed';
-    });
-  </script>
+  const removeFromCart = useCallback(async (id) => {
+    if (IS_CONFIGURED && client && checkout) {
+      const updated = await client.checkout.removeLineItems(checkout.id, [id]);
+      setCheckout(updated);
+    } else {
+      setDemoCart(prev => prev.filter(i => i.id !== id));
+    }
+  }, [client, checkout]);
 
+  const updateQty = useCallback(async (id, qty) => {
+    if (qty <= 0) {
+      if (IS_CONFIGURED && client && checkout) {
+        const updated = await client.checkout.removeLineItems(checkout.id, [id]);
+        setCheckout(updated);
+      } else {
+        setDemoCart(prev => prev.filter(i => i.id !== id));
+      }
+      return;
+    }
+    if (IS_CONFIGURED && client && checkout) {
+      const updated = await client.checkout.updateLineItems(checkout.id, [{ id, quantity: qty }]);
+      setCheckout(updated);
+    } else {
+      setDemoCart(prev => prev.map(i => i.id === id ? { ...i, qty } : i));
+    }
+  }, [client, checkout]);
+
+  const cartItems = IS_CONFIGURED && checkout
+    ? (checkout.lineItems || []).map(item => ({
+        id:    item.id,
+        sku:   Object.entries(SHOPIFY_CONFIG.variantIds).find(([, v]) => v === item.variant?.id)?.[0] || 'SPORT',
+        name:  item.title,
+        qty:   item.quantity,
+        price: parseFloat(item.variant?.price?.amount || 0),
+      }))
+    : demoCart;
+
+  const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
+  const subtotal  = cartItems.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2);
+  const checkoutUrl = IS_CONFIGURED ? checkout?.webUrl : null;
+
+  return { cartItems, cartCount, subtotal, checkoutUrl, cartOpen, setCartOpen, addToCart, removeFromCart, updateQty, loading };
+}
+
+/* ─── STRIP ILLUSTRATION ─────────────────────────────── */
+function StripIllustration({ color = 'rgba(0,0,0,0.35)', size = 'md' }) {
+  const dims = {
+    sm: { h: 4, w: 28, gap: 4 },
+    md: { h: 5, w: 36, gap: 5 },
+    lg: { h: 7, w: 52, gap: 6 },
+  };
+  const d = dims[size];
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap: d.gap }}>
+      <div style={{ width: d.w,      height: d.h, background: color, borderRadius: 9999 }} />
+      <div style={{ width: d.w,      height: d.h, background: color, borderRadius: 9999 }} />
+      <div style={{ width: d.w*0.7,  height: d.h, background: color, borderRadius: 9999, opacity: 0.3 }} />
+    </div>
+  );
+}
+
+/* ─── CART SIDEBAR ───────────────────────────────────── */
+function CartSidebar({ cartItems, subtotal, checkoutUrl, onClose, onRemove, onUpdateQty, loading }) {
+  const [closing, setClosing] = useState(false);
+
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => onClose(), 280);
+  };
+
+  const skuColors = {
+    SPORT: { bg: C.pink,    strip: 'rgba(0,0,0,0.3)' },
+    SLEEP: { bg: '#1a1a1a', strip: 'rgba(255,255,255,0.3)' },
+    MAX:   { bg: C.yellow,  strip: 'rgba(0,0,0,0.3)' },
+  };
+
+  return (
+    <>
+      <div onClick={handleClose} style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)',
+        zIndex: 400, backdropFilter: 'blur(3px)',
+        animation: `${closing ? 'fadeOut' : 'fadeIn'} 0.28s ease both`,
+      }} />
+      <div style={{
+        position: 'fixed', top: 0, right: 0, bottom: 0, width: 400, maxWidth: '92vw',
+        background: '#0d0d0d', zIndex: 401,
+        borderLeft: `1px solid ${C.border}`,
+        display: 'flex', flexDirection: 'column',
+        boxShadow: '-32px 0 80px rgba(0,0,0,0.7)',
+        animation: `${closing ? 'slideOutRight' : 'slideInRight'} 0.32s cubic-bezier(0.16,1,0.3,1) both`,
+      }}>
+
+        {/* Header */}
+        <div style={{
+          padding: '24px 28px', borderBottom: `1px solid ${C.border}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0,
+        }}>
+          <div>
+            <div style={{ fontFamily: 'Bebas Neue', fontSize: 26, letterSpacing: '0.08em', color: C.white, lineHeight: 1 }}>Your Bag</div>
+            {!IS_CONFIGURED && (
+              <div style={{ fontSize: 9, color: C.pink, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', marginTop: 5 }}>
+                Demo Mode — configure Shopify to enable checkout
+              </div>
+            )}
+          </div>
+          <button onClick={handleClose} style={{
+            width: 32, height: 32, borderRadius: '50%', background: C.s2, border: 'none', cursor: 'pointer',
+            color: C.text2, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.15s ease, color 0.15s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = C.s3; e.currentTarget.style.color = C.white; }}
+          onMouseLeave={e => { e.currentTarget.style.background = C.s2; e.currentTarget.style.color = C.text2; }}
+          >×</button>
+        </div>
+
+        {/* Items */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '20px 28px' }}>
+          {cartItems.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '72px 0' }}>
+              <div style={{ fontFamily: 'Bebas Neue', fontSize: 42, color: '#222', marginBottom: 16, letterSpacing: '0.05em' }}>Empty.</div>
+              <p style={{ fontSize: 13, color: '#444', lineHeight: 1.7 }}>Your bag is empty.<br/>Add a strip and breathe better.</p>
+            </div>
+          ) : (
+            cartItems.map(item => {
+              const sc = skuColors[item.sku] || skuColors.SPORT;
+              return (
+                <div key={item.id} style={{
+                  padding: '18px 0', borderBottom: `1px solid ${C.border}`,
+                  display: 'flex', gap: 14, alignItems: 'flex-start',
+                }}>
+                  <div style={{
+                    width: 56, height: 56, borderRadius: 10, flexShrink: 0,
+                    background: sc.bg, border: `1px solid ${C.border}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <StripIllustration color={sc.strip} size="sm" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                      <div style={{ fontFamily: 'Bebas Neue', fontSize: 16, color: C.white, letterSpacing: '0.05em', lineHeight: 1.2 }}>{item.name}</div>
+                      <button onClick={() => onRemove(item.id)} style={{
+                        background: 'none', border: 'none', cursor: 'pointer', color: '#444', fontSize: 16,
+                        padding: '0 0 0 4px', flexShrink: 0, lineHeight: 1,
+                        transition: 'color 0.15s ease',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#888'}
+                      onMouseLeave={e => e.currentTarget.style.color = '#444'}
+                      >×</button>
+                    </div>
+                    <div style={{ fontSize: 10, color: C.text2, marginTop: 3, letterSpacing: '0.1em', textTransform: 'uppercase' }}>30 Strips · {item.sku}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
+                      <div style={{
+                        display: 'flex', alignItems: 'center',
+                        background: '#111', borderRadius: 9999, overflow: 'hidden',
+                        border: `1px solid ${C.border}`,
+                      }}>
+                        <button onClick={() => onUpdateQty(item.id, item.qty - 1)} style={{
+                          width: 28, height: 28, background: 'none', border: 'none', color: C.white,
+                          cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'background 0.15s ease',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = C.s3}
+                        onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                        >−</button>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: C.white, padding: '0 6px', minWidth: 20, textAlign: 'center' }}>{item.qty}</span>
+                        <button onClick={() => onUpdateQty(item.id, item.qty + 1)} style={{
+                          width: 28, height: 28, background: 'none', border: 'none', color: C.white,
+                          cursor: 'pointer', fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          transition: 'background 0.15s ease',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = C.s3}
+                        onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                        >+</button>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: 15, color: C.yellow }}>
+                        ${(item.price * item.qty).toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Footer */}
+        <div style={{ padding: '20px 28px', borderTop: `1px solid ${C.border}`, flexShrink: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.text2 }}>Subtotal</div>
+            <div style={{ fontFamily: 'Bebas Neue', fontSize: 26, color: C.white, letterSpacing: '0.04em' }}>${subtotal}</div>
+          </div>
+          {cartItems.length > 0 && (
+            <>
+              {checkoutUrl ? (
+                <a href={checkoutUrl} style={{ display: 'block', textDecoration: 'none' }}>
+                  <button style={{
+                    width: '100%', fontFamily: 'DM Sans', fontSize: 13, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
+                    padding: '15px', borderRadius: 9999,
+                    background: C.yellow, color: C.black, border: 'none', cursor: 'pointer',
+                    boxShadow: '0 4px 24px rgba(232,255,0,0.2)',
+                    transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                    opacity: loading ? 0.7 : 1,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(232,255,0,0.4)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(232,255,0,0.2)'; }}
+                  >{loading ? 'Updating...' : 'Checkout →'}</button>
+                </a>
+              ) : (
+                <button style={{
+                  width: '100%', fontFamily: 'DM Sans', fontSize: 13, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
+                  padding: '15px', borderRadius: 9999,
+                  background: C.s2, color: C.text2, border: `1px solid ${C.border}`, cursor: 'default',
+                }}>Configure Shopify to Checkout</button>
+              )}
+              <p style={{ fontSize: 10, color: '#444', textAlign: 'center', marginTop: 12, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                {checkoutUrl ? 'Secure checkout · Powered by Shopify' : 'Demo mode · Add your store credentials above'}
+              </p>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─── HEADER ─────────────────────────────────────────── */
+function Header({ onShopClick, cartCount, onCartOpen }) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  return (
+    <header style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
+      background: scrolled ? 'rgba(10,10,10,0.94)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(14px)' : 'none',
+      borderBottom: scrolled ? `1px solid ${C.border}` : '1px solid transparent',
+      transition: 'background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease',
+    }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 28px', height: 64, display: 'flex', alignItems: 'center', gap: 32 }}>
+        <div style={{ fontFamily: 'Bebas Neue', fontSize: 26, letterSpacing: '0.05em', color: C.pink, flexShrink: 0, cursor: 'default' }}>
+          UNL<span style={{ color: C.yellow }}>O</span>CK
+        </div>
+        <nav style={{ display: 'flex', gap: 28, flex: 1 }}>
+          {['Shop','Sport','Sleep','Max','About'].map(l => (
+            <a key={l} href="#" style={{
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.13em', textTransform: 'uppercase',
+              color: l === 'Shop' ? C.white : C.text2, textDecoration: 'none',
+              transition: 'color 0.15s ease',
+            }}
+            onMouseEnter={e => e.target.style.color = C.white}
+            onMouseLeave={e => e.target.style.color = l === 'Shop' ? C.white : C.text2}
+            >{l}</a>
+          ))}
+        </nav>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={onShopClick} style={{
+            fontFamily: 'DM Sans', fontSize: 11, fontWeight: 700, letterSpacing: '0.13em', textTransform: 'uppercase',
+            padding: '9px 22px', borderRadius: 9999,
+            background: C.yellow, color: C.black, border: 'none', cursor: 'pointer',
+            transition: 'opacity 0.15s ease, transform 0.15s ease',
+          }}
+          onMouseEnter={e => { e.target.style.opacity = '0.88'; e.target.style.transform = 'translateY(-1px)'; }}
+          onMouseLeave={e => { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }}
+          >Shop Now</button>
+          <div onClick={onCartOpen} style={{ position: 'relative', cursor: 'pointer' }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={C.white} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <div style={{
+              position: 'absolute', top: -4, right: -4,
+              minWidth: cartCount > 0 ? 16 : 9, height: cartCount > 0 ? 16 : 9,
+              borderRadius: 9999, background: C.pink, border: `2px solid ${C.black}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: cartCount > 0 ? '0 3px' : 0,
+              transition: 'min-width 0.2s ease, height 0.2s ease',
+            }}>
+              {cartCount > 0 && <span style={{ fontSize: 8, color: C.white, fontWeight: 700, lineHeight: 1 }}>{cartCount}</span>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* ─── HERO ───────────────────────────────────────────── */
+function Hero({ onShopClick }) {
+  return (
+    <section style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1fr', position: 'relative', overflow: 'hidden', background: C.black }}>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '128px 64px 80px 52px', position: 'relative', zIndex: 2 }}>
+        <div className="hero-anim-1" style={{ width: 48, height: 3, background: C.yellow, marginBottom: 28 }} />
+        <div className="hero-anim-1" style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: C.yellow, marginBottom: 20 }}>
+          Performance Nasal Strips
+        </div>
+        <h1 className="hero-anim-2" style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(64px,8.5vw,122px)', color: C.white, lineHeight: 0.88, letterSpacing: '0.02em', marginBottom: 32 }}>
+          Breathe<br/>More.<br/><span style={{ color: C.pink }}>Be More.</span>
+        </h1>
+        <p className="hero-anim-3" style={{ fontSize: 16, color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: 320, marginBottom: 44 }}>
+          It opens your nose. That's it.<br/>That's the whole thing.
+        </p>
+        <div className="hero-anim-4" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <button onClick={onShopClick} style={{
+            fontFamily: 'DM Sans', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
+            padding: '14px 36px', borderRadius: 9999,
+            background: C.yellow, color: C.black, border: 'none', cursor: 'pointer',
+            boxShadow: '0 4px 24px rgba(232,255,0,0.25)',
+            transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(232,255,0,0.4)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(232,255,0,0.25)'; }}
+          >Open Up →</button>
+          <button style={{
+            fontFamily: 'DM Sans', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
+            padding: '14px 28px', borderRadius: 9999,
+            background: 'transparent', color: 'rgba(255,255,255,0.55)',
+            border: '1.5px solid rgba(255,255,255,0.18)', cursor: 'pointer',
+            transition: 'border-color 0.15s ease, color 0.15s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.55)'; e.currentTarget.style.color = C.white; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; }}
+          >How it works</button>
+        </div>
+        <div className="hero-anim-4" style={{ marginTop: 64, display: 'flex', gap: 40, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 28 }}>
+          {[['30', 'Strips/pack'], ['3', 'SKUs'], ['#1', 'Hold']].map(([n, l]) => (
+            <div key={n}>
+              <div style={{ fontFamily: 'Bebas Neue', fontSize: 28, color: C.white, lineHeight: 1 }}>{n}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 4 }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ position: 'relative', overflow: 'hidden', background: C.black }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(ellipse 75% 65% at 55% 52%, rgba(255,60,172,0.2) 0%, transparent 68%)',
+          zIndex: 1,
+        }} />
+        <div style={{
+          position: 'absolute', top: 0, right: 0, width: 0, height: 0,
+          borderStyle: 'solid', borderWidth: '0 72px 72px 0',
+          borderColor: `transparent ${C.yellow} transparent transparent`,
+          zIndex: 4,
+        }} />
+        <img
+          src="brand_assets/Generated Image April 27, 2026 - 5_10PM.jpg"
+          alt="UNLOCK nasal strips"
+          style={{
+            position: 'absolute', width: '110%', height: 'auto', top: '-14%', left: '-5%', zIndex: 2,
+            filter: 'brightness(0.88) contrast(1.05) saturate(1.1)',
+            maskImage: 'linear-gradient(to right, transparent 0%, black 14%, black 88%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 14%, black 88%, transparent 100%)',
+          }}
+        />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: `linear-gradient(to right, ${C.black} 0%, transparent 20%)`,
+          zIndex: 3, pointerEvents: 'none',
+        }} />
+      </div>
+    </section>
+  );
+}
+
+/* ─── MARQUEE ────────────────────────────────────────── */
+function Marquee() {
+  const items = ['BREATHE MORE. BE MORE.', 'OPEN UP.', 'FULL CAPACITY.', "DON'T LEAVE AIR ON THE TABLE.", 'WEAR IT. OWN IT. BREATHE IT.'];
+  const doubled = [...items, ...items];
+  return (
+    <div style={{ background: C.yellow, borderTop: `4px solid ${C.black}`, borderBottom: `4px solid ${C.black}`, padding: '12px 0', overflow: 'hidden' }}>
+      <div className="marquee-track">
+        {doubled.map((item, i) => (
+          <React.Fragment key={i}>
+            <span style={{ fontFamily: 'Bebas Neue', fontSize: 14, letterSpacing: '0.13em', color: C.black, padding: '0 28px', whiteSpace: 'nowrap' }}>{item}</span>
+            <span style={{ fontFamily: 'Bebas Neue', fontSize: 14, color: C.black, padding: '0 8px' }}>·</span>
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── PRODUCT CARD ───────────────────────────────────── */
+function ProductCard({ sku, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const cfgs = {
+    SPORT: { bg: C.pink,    name: 'Sport', hold: 'Max Hold',    price: '$14.99', accentO: C.yellow, isDark: false, desc: 'For athletes who need max airflow through sweat, sets, and sprints.' },
+    SLEEP: { bg: '#0f0f0f', name: 'Sleep', hold: 'Gentle Hold', price: '$12.99', accentO: C.yellow, isDark: true,  desc: 'All-night open airways. Peels clean in the morning.', border: true },
+    MAX:   { bg: C.yellow,  name: 'Max',   hold: 'Extra Wide',  price: '$16.99', accentO: C.pink,   isDark: false, desc: 'Widest strip in the lineup. Full capacity. No compromises.' },
+  };
+  const c = cfgs[sku];
+
+  return (
+    <div
+      onClick={() => onClick(sku)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        flex: 1, minWidth: 220,
+        background: c.bg, borderRadius: 14, overflow: 'hidden', cursor: 'pointer',
+        border: c.border ? `1px solid ${C.border}` : 'none',
+        transform: hovered ? 'translateY(-8px)' : 'translateY(0)',
+        boxShadow: hovered
+          ? (sku === 'SPORT' ? '0 24px 56px rgba(255,60,172,0.45)' : sku === 'MAX' ? '0 24px 56px rgba(232,255,0,0.35)' : '0 24px 56px rgba(0,0,0,0.55)')
+          : '0 4px 20px rgba(0,0,0,0.3)',
+        transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s cubic-bezier(0.16,1,0.3,1)',
+      }}
+    >
+      <div style={{ padding: '28px 28px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', minHeight: 180 }}>
+        <div>
+          <div style={{ fontFamily: 'DM Sans', fontSize: 10, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: c.isDark ? 'rgba(255,255,255,0.3)' : 'rgba(10,10,10,0.4)', marginBottom: 10 }}>{c.name}</div>
+          <div style={{ fontFamily: 'Bebas Neue', fontSize: 38, letterSpacing: '0.05em', color: c.isDark ? C.white : C.black, lineHeight: 1 }}>
+            UNL<span style={{ color: c.accentO }}>O</span>CK
+          </div>
+          <div style={{ marginTop: 14, display: 'inline-block', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase',
+            background: c.isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.12)',
+            color: c.isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)',
+            padding: '4px 10px', borderRadius: 9999 }}>{c.hold} · 30 Strips</div>
+        </div>
+        <StripIllustration color={c.isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.25)'} size="lg" />
+      </div>
+      <div style={{ background: c.isDark ? C.s2 : 'rgba(0,0,0,0.12)', padding: '20px 24px 24px' }}>
+        <p style={{ fontSize: 13, lineHeight: 1.65, color: c.isDark ? 'rgba(255,255,255,0.45)' : 'rgba(10,10,10,0.55)', marginBottom: 18 }}>{c.desc}</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ fontSize: 22, fontWeight: 700, color: c.isDark ? C.yellow : C.black }}>{c.price}</div>
+          <div style={{
+            fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+            color: c.isDark ? C.pink : 'rgba(10,10,10,0.55)',
+            opacity: hovered ? 1 : 0.5, transition: 'opacity 0.2s ease',
+          }}>Add to bag →</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── PRODUCT GRID ───────────────────────────────────── */
+function ProductGrid({ onProductClick }) {
+  return (
+    <section id="shop" style={{ background: C.s1, padding: '96px 28px' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <div style={{ marginBottom: 60, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: C.pink, marginBottom: 14 }}>Three SKUs. One mission.</div>
+            <h2 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(40px,6.5vw,78px)', color: C.white, lineHeight: 0.93, letterSpacing: '0.03em' }}>
+              Find your<br/><span style={{ color: C.yellow }}>strip.</span>
+            </h2>
+          </div>
+          <p style={{ fontSize: 15, color: C.text2, maxWidth: 300, lineHeight: 1.7 }}>
+            Same nose. Same airway. Pick the hold and width that fits how you move.
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <ProductCard sku="SPORT" onClick={onProductClick} />
+          <ProductCard sku="SLEEP" onClick={onProductClick} />
+          <ProductCard sku="MAX"   onClick={onProductClick} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── BENEFITS ───────────────────────────────────────── */
+function Benefits() {
+  const items = [
+    { stat: '30', unit: 'strips', desc: 'Per pack. Precision-cut, ready to go.', color: C.pink },
+    { stat: '60', unit: 'sec',    desc: 'From pack to nose. No fuss, no setup.', color: C.yellow },
+    { stat: '3×', unit: 'flow',   desc: 'More airflow vs. restricted breathing.', color: C.white },
+    { stat: '0',  unit: 'BS',     desc: 'No clinical speak. No wellness fluff.', color: C.text2 },
+  ];
+  return (
+    <section style={{ background: C.black, padding: '96px 28px', borderTop: `1px solid ${C.border}` }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: C.text2, marginBottom: 44, textAlign: 'center' }}>
+          The Numbers
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: 1, background: C.border, borderRadius: 14, overflow: 'hidden' }}>
+          {items.map(it => (
+            <div key={it.stat} style={{ background: C.black, padding: '44px 36px' }}>
+              <div style={{ fontFamily: 'Bebas Neue', fontSize: 76, color: it.color, lineHeight: 1, letterSpacing: '0.02em', marginBottom: 8 }}>
+                {it.stat}<span style={{ fontSize: 36, opacity: 0.65 }}>{it.unit}</span>
+              </div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>{it.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── HOW IT WORKS ───────────────────────────────────── */
+function HowItWorks() {
+  const steps = [
+    { n: '01', title: 'PEEL.', body: 'Remove from the pack. Takes about a second. We timed it.', color: C.pink },
+    { n: '02', title: 'PLACE.', body: 'Center it across the bridge of your nose. Press the tabs down.', color: C.yellow },
+    { n: '03', title: 'BREATHE.', body: 'Your nasal passages open. Air comes in. You go harder.', color: C.pink },
+  ];
+  return (
+    <section style={{ background: C.black, borderTop: `1px solid ${C.border}`, padding: '96px 28px' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <div style={{ marginBottom: 72 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: C.pink, marginBottom: 14 }}>03 — How It Works</div>
+          <h2 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(40px,6.5vw,78px)', color: C.white, lineHeight: 0.93, letterSpacing: '0.03em' }}>
+            Three steps.<br/><span style={{ color: C.pink }}>Zero complexity.</span>
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: `1px solid ${C.border}` }}>
+          {steps.map((s, i) => (
+            <div key={s.n} style={{ padding: '56px 48px', borderRight: i < 2 ? `1px solid ${C.border}` : 'none' }}>
+              <div style={{ fontFamily: 'Bebas Neue', fontSize: '9rem', lineHeight: 0.9, color: s.color, marginBottom: 24 }}>{s.n}</div>
+              <h3 style={{ fontFamily: 'Bebas Neue', fontSize: '3rem', color: C.white, marginBottom: 14 }}>{s.title}</h3>
+              <p style={{ fontSize: 14, lineHeight: 1.75, color: 'rgba(255,255,255,0.38)' }}>{s.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── LIFESTYLE SPLIT ────────────────────────────────── */
+function LifestyleSplit() {
+  return (
+    <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '82vh', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', overflow: 'hidden' }}>
+        <img
+          src="brand_assets/Generated Image April 27, 2026 - 2_24PM.jpg"
+          alt="Sleep better with UNLOCK"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '55% center' }}
+        />
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, transparent 50%, ${C.pink})` }} />
+        <div style={{ position: 'absolute', inset: 0, background: C.pink, mixBlendMode: 'multiply', opacity: 0.38 }} />
+      </div>
+      <div style={{ background: C.pink, padding: '88px 72px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(10,10,10,0.45)', marginBottom: 20 }}>
+          04 — The Audience
+        </div>
+        <h2 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(48px,6.5vw,88px)', color: C.black, lineHeight: 0.88, letterSpacing: '0.02em', marginBottom: 40 }}>
+          For people<br/>who go<br/>hard.
+        </h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 52 }}>
+          {['Athletes','Gym-Goers','Runners','Heavy Sleepers','Snorers','Mouth-Breathers'].map(tag => (
+            <span key={tag} style={{
+              background: C.black, color: C.white,
+              fontFamily: 'DM Sans', fontWeight: 700, fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase',
+              padding: '9px 16px',
+            }}>{tag}</span>
+          ))}
+        </div>
+        <div style={{ borderTop: '2px solid rgba(10,10,10,0.15)', paddingTop: 40 }}>
+          <p style={{ fontFamily: 'DM Sans', fontWeight: 700, fontSize: 'clamp(1rem,1.8vw,1.3rem)', color: 'rgba(10,10,10,0.65)', lineHeight: 1.65, maxWidth: 440 }}>
+            "Yes it goes on your face.<br/>Yes people will stare.<br/>Breathe better anyway."
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── CTA BAND ───────────────────────────────────────── */
+function CTABand({ onShopClick }) {
+  return (
+    <section style={{ background: C.pink, padding: '88px 28px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute', right: 0, top: 0, bottom: 0, width: '32%',
+        background: C.yellow, clipPath: 'polygon(18% 0, 100% 0, 100% 100%, 0 100%)',
+      }} />
+      <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 32 }}>
+        <h2 style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(40px,6.5vw,88px)', color: C.black, lineHeight: 0.9, letterSpacing: '0.03em' }}>
+          Don't leave air<br/>on the table.
+        </h2>
+        <button onClick={onShopClick} style={{
+          fontFamily: 'DM Sans', fontSize: 14, fontWeight: 700, letterSpacing: '0.13em', textTransform: 'uppercase',
+          padding: '17px 52px', borderRadius: 9999,
+          background: C.black, color: C.white, border: 'none', cursor: 'pointer',
+          boxShadow: '0 6px 28px rgba(0,0,0,0.4)',
+          transition: 'transform 0.15s ease',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+        >Shop Now →</button>
+      </div>
+    </section>
+  );
+}
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+function Footer() {
+  const cols = [
+    { title: 'Shop',  links: ['Sport','Sleep','Max','Bundle'] },
+    { title: 'Brand', links: ['About','Our Story','Press','Stockists'] },
+    { title: 'Help',  links: ['FAQ','Shipping','Returns','Contact'] },
+  ];
+  return (
+    <footer style={{ background: '#050505', borderTop: `1px solid ${C.border}`, padding: '72px 28px 36px' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 52, marginBottom: 56 }}>
+          <div>
+            <div style={{ fontFamily: 'Bebas Neue', fontSize: 32, color: C.pink, letterSpacing: '0.05em', marginBottom: 14 }}>
+              UNL<span style={{ color: C.yellow }}>O</span>CK
+            </div>
+            <p style={{ fontSize: 13, color: '#555', lineHeight: 1.75, maxWidth: 240, marginBottom: 24 }}>
+              Nasal strips built for people who go hard. No fluff. No pharmacy vibes.
+            </p>
+            <div style={{ display: 'flex' }}>
+              <input placeholder="Your email" style={{
+                flex: 1, background: '#111', border: `1px solid ${C.border}`, borderRight: 'none',
+                padding: '11px 14px', color: C.white, fontFamily: 'DM Sans', fontSize: 12,
+                borderRadius: '6px 0 0 6px', outline: 'none',
+              }} />
+              <button style={{
+                background: C.pink, border: 'none', color: C.white,
+                padding: '11px 18px', cursor: 'pointer',
+                borderRadius: '0 6px 6px 0', fontFamily: 'DM Sans', fontWeight: 700, fontSize: 11, letterSpacing: '0.1em',
+                transition: 'background 0.15s ease, color 0.15s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = C.yellow; e.currentTarget.style.color = C.black; }}
+              onMouseLeave={e => { e.currentTarget.style.background = C.pink; e.currentTarget.style.color = C.white; }}
+              >Go</button>
+            </div>
+          </div>
+          {cols.map(col => (
+            <div key={col.title}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: C.pink, marginBottom: 20 }}>{col.title}</div>
+              {col.links.map(l => (
+                <div key={l} style={{ fontSize: 13, color: '#555', marginBottom: 12, cursor: 'pointer', transition: 'color 0.15s ease' }}
+                  onMouseEnter={e => e.target.style.color = C.white}
+                  onMouseLeave={e => e.target.style.color = '#555'}
+                >{l}</div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: 24, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ fontSize: 11, color: '#333', letterSpacing: '0.08em' }}>© 2025 UNLOCK. All rights reserved.</div>
+          <div style={{ fontSize: 11, color: '#333', letterSpacing: '0.08em' }}>WEAR IT. OWN IT. BREATHE IT.</div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ─── PDP OVERLAY ────────────────────────────────────── */
+function PDPOverlay({ sku, onClose, onAddToCart, loading }) {
+  const cfgs = {
+    SPORT: { bg: C.pink,    name: 'Sport', tagline: 'Full capacity.',               hold: 'Max Hold',    price: '$14.99', accentO: C.yellow, isDark: false, desc: 'Built for athletes. The max-hold formula grips through sweat and keeps your nasal passage wide open from warm-up to finish line.' },
+    SLEEP: { bg: '#1a1a1a', name: 'Sleep', tagline: 'Open up.',                     hold: 'Gentle Hold', price: '$12.99', accentO: C.yellow, isDark: true,  desc: "The gentle-hold strip stays put all night without leaving a mark. Stop mouth-breathing. Wake up like you actually slept.", border: true },
+    MAX:   { bg: C.yellow,  name: 'Max',   tagline: "Don't leave air on the table.", hold: 'Extra Wide',  price: '$16.99', accentO: C.pink,   isDark: false, desc: "The widest strip in the lineup. Extra surface area, extra airflow. For bigger sessions, bigger results." },
+  };
+  const c = cfgs[sku];
+  if (!c) return null;
+
+  return (
+    <div
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.88)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+      onClick={onClose}
+    >
+      <div
+        style={{ background: c.bg, borderRadius: 18, maxWidth: 540, width: '100%', overflow: 'hidden', border: c.border ? `1px solid ${C.border}` : 'none', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div style={{ padding: '40px 40px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <div style={{ fontFamily: 'Bebas Neue', fontSize: 58, color: c.isDark ? C.white : C.black, lineHeight: 1, letterSpacing: '0.05em' }}>
+              UNL<span style={{ color: c.accentO }}>O</span>CK
+            </div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: c.isDark ? '#555' : 'rgba(10,10,10,0.4)', marginTop: 5 }}>{c.name}</div>
+          </div>
+          <StripIllustration color={c.isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.25)'} size="lg" />
+        </div>
+        <div style={{ background: C.s2, padding: '32px 40px 40px' }}>
+          <div style={{ fontFamily: 'Bebas Neue', fontSize: 34, color: C.yellow, letterSpacing: '0.05em', marginBottom: 14 }}>{c.tagline}</div>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, marginBottom: 28 }}>{c.desc}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
+            {[c.hold, '30 Strips', 'Ships Free'].map(tag => (
+              <div key={tag} style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', background: 'rgba(255,255,255,0.07)', color: '#888', padding: '5px 12px', borderRadius: 9999 }}>{tag}</div>
+            ))}
+            <div style={{ marginLeft: 'auto', fontFamily: 'DM Sans', fontSize: 26, fontWeight: 700, color: C.yellow }}>{c.price}</div>
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              onClick={() => onAddToCart(sku)}
+              disabled={loading}
+              style={{
+                flex: 1, fontFamily: 'DM Sans', fontSize: 13, fontWeight: 700, letterSpacing: '0.13em', textTransform: 'uppercase',
+                padding: '15px', borderRadius: 9999,
+                background: C.yellow, color: C.black, border: 'none', cursor: loading ? 'default' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+                transition: 'transform 0.15s ease, opacity 0.15s ease',
+              }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
+            >{loading ? 'Adding...' : 'Add to Bag'}</button>
+            <button onClick={onClose} style={{
+              fontFamily: 'DM Sans', fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+              padding: '15px 22px', borderRadius: 9999,
+              background: 'rgba(255,255,255,0.07)', color: C.white, border: 'none', cursor: 'pointer',
+              transition: 'background 0.15s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.14)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; }}
+            >Close ×</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── APP ────────────────────────────────────────────── */
+function App() {
+  const [activePDP, setActivePDP] = useState(null);
+  const { cartItems, cartCount, subtotal, checkoutUrl, cartOpen, setCartOpen, addToCart, removeFromCart, updateQty, loading } = useCart();
+
+  const handleShopClick = () => {
+    const el = document.getElementById('shop');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleAddToCart = (sku) => {
+    addToCart(sku);
+    setActivePDP(null);
+  };
+
+  return (
+    <div>
+      <Header onShopClick={handleShopClick} cartCount={cartCount} onCartOpen={() => setCartOpen(true)} />
+      <Hero onShopClick={handleShopClick} />
+      <Marquee />
+      <ProductGrid onProductClick={sku => setActivePDP(sku)} />
+      <Benefits />
+      <HowItWorks />
+      <LifestyleSplit />
+      <CTABand onShopClick={handleShopClick} />
+      <Footer />
+      {activePDP && (
+        <PDPOverlay
+          sku={activePDP}
+          onClose={() => setActivePDP(null)}
+          onAddToCart={handleAddToCart}
+          loading={loading}
+        />
+      )}
+      {cartOpen && (
+        <CartSidebar
+          cartItems={cartItems}
+          subtotal={subtotal}
+          checkoutUrl={checkoutUrl}
+          onClose={() => setCartOpen(false)}
+          onRemove={removeFromCart}
+          onUpdateQty={updateQty}
+          loading={loading}
+        />
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>
