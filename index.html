@@ -6,8 +6,6 @@
 <title>UNLOCK — Breathe More. Be More.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<!-- Shopify Buy SDK -->
-<script src="https://sdks.shopifycdn.com/js-buy-sdk/v2/latest/index.umd.min.js"></script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
@@ -69,22 +67,46 @@
 const { useState, useEffect, useRef, useCallback } = React;
 
 // ─── SHOPIFY CONFIG ───────────────────────────────────────────────────────────
-// Step 1: Replace domain with your .myshopify.com URL
-// Step 2: In Shopify Admin → Settings → Apps and sales channels → Develop apps
-//         Create an app, enable Storefront API, copy the access token
-// Step 3: For each product, go to the product page in Admin. The numeric ID is
-//         in the URL. Encode it: btoa('gid://shopify/ProductVariant/YOUR_ID')
 const SHOPIFY_CONFIG = {
   domain:                'unlock-9289.myshopify.com',
   storefrontAccessToken: '249e39ff48af5fee0a2b7852b72f9fd3',
   variantIds: {
-    SPORT: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC81MzAzODU3Nzc0NjIzNg==',
-    SLEEP: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC81MzAzODU3ODIzNzc1Ng==',
-    MAX:   'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC81MzAzODU3NjkyNzAzNg==',
+    SPORT: 'gid://shopify/ProductVariant/53038577746236',
+    SLEEP: 'gid://shopify/ProductVariant/53038578237756',
+    MAX:   'gid://shopify/ProductVariant/53038576927036',
   },
 };
 
 const IS_CONFIGURED = !SHOPIFY_CONFIG.domain.includes('YOUR-STORE');
+
+// ─── STOREFRONT CART API ──────────────────────────────────────────────────────
+const CART_FRAGMENT = `
+  id checkoutUrl
+  lines(first: 20) { edges { node {
+    id quantity
+    merchandise { ... on ProductVariant {
+      id
+      price { amount currencyCode }
+      product { title }
+    }}
+  }}}
+  cost { subtotalAmount { amount currencyCode } }
+`;
+
+async function gqlFetch(query, variables = {}) {
+  const res = await fetch(`https://${SHOPIFY_CONFIG.domain}/api/2024-10/graphql.json`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Shopify-Storefront-Access-Token': SHOPIFY_CONFIG.storefrontAccessToken,
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+  const json = await res.json();
+  if (json.errors) throw new Error(json.errors[0].message);
+  return json.data;
+}
+
 const C = {
   black:  '#0a0a0a',
   pink:   '#ff3cac',
@@ -99,45 +121,44 @@ const C = {
 
 // ─── CART HOOK ────────────────────────────────────────────────────────────────
 function useCart() {
-  const [client, setClient]     = useState(null);
-  const [checkout, setCheckout] = useState(null);
+  const [cart, setCart]         = useState(null);
   const [demoCart, setDemoCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [loading, setLoading]   = useState(false);
 
   useEffect(() => {
-    if (!IS_CONFIGURED || !window.ShopifyBuy) return;
-    const c = ShopifyBuy.buildClient({
-      domain: SHOPIFY_CONFIG.domain,
-      storefrontAccessToken: SHOPIFY_CONFIG.storefrontAccessToken,
-    });
-    setClient(c);
-    const storedId = localStorage.getItem('unlock_checkout_id');
-    const init = storedId
-      ? c.checkout.fetch(storedId).then(co => (co && !co.completedAt) ? co : c.checkout.create())
-      : c.checkout.create();
-    init.then(co => {
-      localStorage.setItem('unlock_checkout_id', co.id);
-      setCheckout(co);
-    }).catch(() => {
-      c.checkout.create().then(co => {
-        localStorage.setItem('unlock_checkout_id', co.id);
-        setCheckout(co);
-      });
-    });
+    if (!IS_CONFIGURED) return;
+    const storedId = localStorage.getItem('unlock_cart_id');
+    if (storedId) {
+      gqlFetch(`query { cart(id: $id) { ${CART_FRAGMENT} } }`.replace('$id', `"${storedId}"`))
+        .then(d => { if (d.cart) setCart(d.cart); })
+        .catch(() => localStorage.removeItem('unlock_cart_id'));
+    }
   }, []);
 
   const addToCart = useCallback(async (sku) => {
-    if (IS_CONFIGURED && client && checkout) {
+    if (IS_CONFIGURED) {
       setLoading(true);
       try {
-        const updated = await client.checkout.addLineItems(checkout.id, [
-          { variantId: SHOPIFY_CONFIG.variantIds[sku], quantity: 1 },
-        ]);
-        setCheckout(updated);
-      } finally {
-        setLoading(false);
-      }
+        const merchandiseId = SHOPIFY_CONFIG.variantIds[sku];
+        let updated;
+        if (cart) {
+          const d = await gqlFetch(
+            `mutation($cartId:ID!,$lines:[CartLineInput!]!){cartLinesAdd(cartId:$cartId,lines:$lines){cart{${CART_FRAGMENT}}}}`,
+            { cartId: cart.id, lines: [{ merchandiseId, quantity: 1 }] }
+          );
+          updated = d.cartLinesAdd.cart;
+        } else {
+          const d = await gqlFetch(
+            `mutation($lines:[CartLineInput!]){cartCreate(input:{lines:$lines}){cart{${CART_FRAGMENT}}}}`,
+            { lines: [{ merchandiseId, quantity: 1 }] }
+          );
+          updated = d.cartCreate.cart;
+          localStorage.setItem('unlock_cart_id', updated.id);
+        }
+        setCart(updated);
+      } catch(e) { console.error('Cart error:', e); }
+      finally { setLoading(false); }
     } else {
       const prices = { SPORT: 14.99, SLEEP: 12.99, MAX: 16.99 };
       const names  = { SPORT: 'UNLOCK Sport', SLEEP: 'UNLOCK Sleep', MAX: 'UNLOCK Max' };
@@ -148,48 +169,54 @@ function useCart() {
       });
     }
     setCartOpen(true);
-  }, [client, checkout]);
+  }, [cart]);
 
-  const removeFromCart = useCallback(async (id) => {
-    if (IS_CONFIGURED && client && checkout) {
-      const updated = await client.checkout.removeLineItems(checkout.id, [id]);
-      setCheckout(updated);
+  const removeFromCart = useCallback(async (lineId) => {
+    if (IS_CONFIGURED && cart) {
+      setLoading(true);
+      try {
+        const d = await gqlFetch(
+          `mutation($cartId:ID!,$lineIds:[ID!]!){cartLinesRemove(cartId:$cartId,lineIds:$lineIds){cart{${CART_FRAGMENT}}}}`,
+          { cartId: cart.id, lineIds: [lineId] }
+        );
+        setCart(d.cartLinesRemove.cart);
+      } finally { setLoading(false); }
     } else {
-      setDemoCart(prev => prev.filter(i => i.id !== id));
+      setDemoCart(prev => prev.filter(i => i.id !== lineId));
     }
-  }, [client, checkout]);
+  }, [cart]);
 
-  const updateQty = useCallback(async (id, qty) => {
-    if (qty <= 0) {
-      if (IS_CONFIGURED && client && checkout) {
-        const updated = await client.checkout.removeLineItems(checkout.id, [id]);
-        setCheckout(updated);
-      } else {
-        setDemoCart(prev => prev.filter(i => i.id !== id));
-      }
-      return;
-    }
-    if (IS_CONFIGURED && client && checkout) {
-      const updated = await client.checkout.updateLineItems(checkout.id, [{ id, quantity: qty }]);
-      setCheckout(updated);
+  const updateQty = useCallback(async (lineId, qty) => {
+    if (qty <= 0) return removeFromCart(lineId);
+    if (IS_CONFIGURED && cart) {
+      setLoading(true);
+      try {
+        const d = await gqlFetch(
+          `mutation($cartId:ID!,$lines:[CartLineUpdateInput!]!){cartLinesUpdate(cartId:$cartId,lines:$lines){cart{${CART_FRAGMENT}}}}`,
+          { cartId: cart.id, lines: [{ id: lineId, quantity: qty }] }
+        );
+        setCart(d.cartLinesUpdate.cart);
+      } finally { setLoading(false); }
     } else {
-      setDemoCart(prev => prev.map(i => i.id === id ? { ...i, qty } : i));
+      setDemoCart(prev => prev.map(i => i.id === lineId ? { ...i, qty } : i));
     }
-  }, [client, checkout]);
+  }, [cart, removeFromCart]);
 
-  const cartItems = IS_CONFIGURED && checkout
-    ? (checkout.lineItems || []).map(item => ({
-        id:    item.id,
-        sku:   Object.entries(SHOPIFY_CONFIG.variantIds).find(([, v]) => v === item.variant?.id)?.[0] || 'SPORT',
-        name:  item.title,
-        qty:   item.quantity,
-        price: parseFloat(item.variant?.price?.amount || 0),
+  const cartItems = IS_CONFIGURED && cart
+    ? (cart.lines?.edges || []).map(({ node }) => ({
+        id:    node.id,
+        sku:   Object.entries(SHOPIFY_CONFIG.variantIds).find(([, v]) => v === node.merchandise?.id)?.[0] || 'SPORT',
+        name:  node.merchandise?.product?.title || 'UNLOCK',
+        qty:   node.quantity,
+        price: parseFloat(node.merchandise?.price?.amount || 0),
       }))
     : demoCart;
 
   const cartCount = cartItems.reduce((s, i) => s + i.qty, 0);
-  const subtotal  = cartItems.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2);
-  const checkoutUrl = IS_CONFIGURED ? checkout?.webUrl : null;
+  const subtotal  = IS_CONFIGURED && cart
+    ? parseFloat(cart.cost?.subtotalAmount?.amount || 0).toFixed(2)
+    : demoCart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2);
+  const checkoutUrl = IS_CONFIGURED ? cart?.checkoutUrl : null;
 
   return { cartItems, cartCount, subtotal, checkoutUrl, cartOpen, setCartOpen, addToCart, removeFromCart, updateQty, loading };
 }
