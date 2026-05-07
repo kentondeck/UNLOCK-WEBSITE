@@ -75,17 +75,16 @@ const { useState, useEffect, useRef, useCallback } = React;
 // Step 3: For each product, go to the product page in Admin. The numeric ID is
 //         in the URL. Encode it: btoa('gid://shopify/ProductVariant/YOUR_ID')
 const SHOPIFY_CONFIG = {
-  domain:                'YOUR-STORE.myshopify.com',
-  storefrontAccessToken: 'YOUR_STOREFRONT_ACCESS_TOKEN',
+  domain:                'unlock-9289.myshopify.com',
+  storefrontAccessToken: '249e39ff48af5fee0a2b7852b72f9fd3',
   variantIds: {
-    SPORT: 'YOUR_SPORT_VARIANT_ID_BASE64',
-    SLEEP: 'YOUR_SLEEP_VARIANT_ID_BASE64',
-    MAX:   'YOUR_MAX_VARIANT_ID_BASE64',
+    SPORT: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC81MzAzODU3Nzc0NjIzNg==',
+    SLEEP: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC81MzAzODU3ODIzNzc1Ng==',
+    MAX:   'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC81MzAzODU3NjkyNzAzNg==',
   },
 };
 
 const IS_CONFIGURED = !SHOPIFY_CONFIG.domain.includes('YOUR-STORE');
-
 const C = {
   black:  '#0a0a0a',
   pink:   '#ff3cac',
